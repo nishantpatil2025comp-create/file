@@ -1,0 +1,85 @@
+
+
+#include <stdio.h>
+
+
+
+int main() {
+    
+ 
+    int choice;
+    int date, am, pm;
+    char name[50], num[100];
+    FILE *ptr;
+
+    printf("Enter the operation:\n");
+    printf("1. Write\n2. Read\n3. Display\n");
+    scanf("%d", &choice);
+
+    switch (choice) {
+
+    case 1:
+            printf("Enter the name of customer:\n");
+          scanf("%s", name);
+
+        printf("Enter the date (as number, e.g., 20241124):\n");
+           scanf("%d", &date);
+         for (int i=0;i<4;i++){
+          printf("Enter the product list:\n");
+           scanf("%s", &num);
+         }
+    
+         printf("Enter the paid amount:\n");
+              scanf("%d", &am);
+     
+ 
+         printf("Enter the unpaid amount:\n");
+             scanf("%d", &pm);
+
+        ptr = fopen("customer_database.txt", "w");
+        if (!ptr) {
+            printf("Error opening file!\n");
+            return 1;
+        }
+
+            fprintf(ptr, "customer name :%s\n", name);
+            fprintf(ptr, " date of purchase: %d\n", date);
+            fprintf(ptr, "list of product :%s\n", num);
+            fprintf(ptr, " paid amount :%d\n", am);
+            fprintf(ptr, " unpaid amount :%d\n", pm);
+
+        fclose(ptr);
+
+              printf("\nData written successfully.\n");
+        break;
+
+       case 2:
+        ptr = fopen("customer_database.txt", "r");
+           if (!ptr) {
+            printf("File not found!\n");
+            return 1;
+        }
+
+            fscanf(ptr, "%s", name);
+        fscanf(ptr, "%d", &date);
+            fscanf(ptr, "%s", num);
+        fscanf(ptr, "%d", &am);
+            fscanf(ptr, "%d", &pm);
+
+        fclose(ptr);
+
+             printf("\n--- Customer Data Read ---\n");
+        printf("Name          : %s\n", name);
+             printf("Date          : %d\n", date);
+                  printf("Product list  : %s\n", num);
+        printf("Paid amount   : %d\n", am);
+           printf("Unpaid amount : %d\n", pm);
+
+        break;
+
+    default:
+        printf("Invalid choice!\n");
+    }
+
+    return 0;
+}
