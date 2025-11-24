@@ -1,0 +1,132 @@
+Research:
+File handling is an essential aspect of programming, allowing us to interact with files stored on a computer’s storage system. In the C programming language, file handling is achieved through a set of functions provided by the standard library. This blog post will guide you through the process of reading and writing files in C, covering the necessary steps and functions involved.
+
+
+https://medium.com/@indradeephalder/day-8-file-handling-reading-and-writing-files-in-c-a306db0f4dab 
+
+
+ANALYSE:
+File handling in C bridges the gap between your program and your device's storage. It allows your program to interact with files—whether you're reading data, writing information, or just organizing things. Without file handling, everything your program does would disappear the moment it stops running.
+It is safe to say that file handling is a critical aspect of any programming language as it enables the interaction between the program and the file system. In this article, we will walk you through the essentials of file handling in C programming, beginning with what it is, the need, and how to use it. We will also cover all operations (reading, writing, closing, and opening), best practices in file handling, common pitfalls, and more.
+
+https://unstop.com/blog/file-handling-in-c  
+
+
+IDEATE :  The file handling is for storing various types of information 
+Of a user like photos ,information of work,text .we are using this file to store 
+Some information about students in school like their name  ,roll number
+Marks etc .
+
+Build in 
+#include <stdio.h>
+
+
+
+int main() {
+    
+ 
+    int choice;
+    int date, am, pm;
+    char name[50], num[100];
+    FILE *ptr;
+
+    printf("Enter the operation:\n");
+    printf("1. Write\n2. Read\n3. Display\n");
+    scanf("%d", &choice);
+
+    switch (choice) {
+
+    case 1:
+            printf("Enter the name of customer:\n");
+          scanf("%s", name);
+
+        printf("Enter the date (as number, e.g., 20241124):\n");
+           scanf("%d", &date);
+         for (int i=0;i<4;i++){
+          printf("Enter the product list:\n");
+           scanf("%s", &num);
+         }
+    
+         printf("Enter the paid amount:\n");
+              scanf("%d", &am);
+     
+ 
+         printf("Enter the unpaid amount:\n");
+             scanf("%d", &pm);
+
+        ptr = fopen("customer_database.txt", "w");
+        if (!ptr) {
+            printf("Error opening file!\n");
+            return 1;
+        }
+
+            fprintf(ptr, "%s\n", name);
+            fprintf(ptr, "%d\n", date);
+            fprintf(ptr, "%s\n", num);
+            fprintf(ptr, "%d\n", am);
+            fprintf(ptr, "%d\n", pm);
+
+        fclose(ptr);
+
+              printf("\nData written successfully.\n");
+        break;
+
+       case 2:
+        ptr = fopen("customer_database.txt", "r");
+           if (!ptr) {
+            printf("File not found!\n");
+            return 1;
+        }
+
+            fscanf(ptr, "%s", name);
+        fscanf(ptr, "%d", &date);
+            fscanf(ptr, "%s", num);
+        fscanf(ptr, "%d", &am);
+            fscanf(ptr, "%d", &pm);
+
+        fclose(ptr);
+
+             printf("\n--- Customer Data Read ---\n");
+        printf("Name          : %s\n", name);
+             printf("Date          : %d\n", date);
+                  printf("Product list  : %s\n", num);
+        printf("Paid amount   : %d\n", am);
+           printf("Unpaid amount : %d\n", pm);
+
+        break;
+
+    default:
+        printf("Invalid choice!\n");
+    }
+
+    return 0;
+}
+
+
+
+Output :
+
+Case 1;
+
+
+
+Case 2
+--- Customer Data Read ---
+Name          : NISHANT
+Date          : 15012007
+Product list  : milk
+Paid amount   : 120
+Unpaid amount : 0
+
+
+
+
+
+
+
+
+
+
+
+
+
