@@ -1,40 +1,28 @@
-
-
 #include <stdio.h>
 
-
-
 int main() {
-    
- 
     int choice;
-    int date, am, pm;
-    char name[50], num[100];
+    int date, am, pm, times;
+    char name[50];
+    char product[50];
+    int price;
+    int total = 0;
     FILE *ptr;
 
-    printf("Enter the operation:\n");
-    printf("1. Write\n2. Read\n3. Display\n");
+    printf("Enter the operation:\n1. Write\n2. Read\n");
     scanf("%d", &choice);
 
     switch (choice) {
 
     case 1:
-            printf("Enter the name of customer:\n");
-          scanf("%s", name);
+        printf("Enter customer name:\n");
+        scanf("%s", name);
 
-        printf("Enter the date (as number, e.g., 20241124):\n");
-           scanf("%d", &date);
-         for (int i=0;i<4;i++){
-          printf("Enter the product list:\n");
-           scanf("%s", &num);
-         }
-    
-         printf("Enter the paid amount:\n");
-              scanf("%d", &am);
-     
- 
-         printf("Enter the unpaid amount:\n");
-             scanf("%d", &pm);
+        printf("Enter date (e.g., 15012007):\n");
+        scanf("%d", &date);
+
+        printf("How many products purchased?\n");
+        scanf("%d", &times);
 
         ptr = fopen("customer_database.txt", "w");
         if (!ptr) {
@@ -42,44 +30,76 @@ int main() {
             return 1;
         }
 
-            fprintf(ptr, "customer name :%s\n", name);
-            fprintf(ptr, " date of purchase: %d\n", date);
-            fprintf(ptr, "list of product :%s\n", num);
-            fprintf(ptr, " paid amount :%d\n", am);
-            fprintf(ptr, " unpaid amount :%d\n", pm);
+        fprintf(ptr, "Name: %s\n", name);
+        fprintf(ptr, "Date: %d\n", date);
+        fprintf(ptr, "Products:\n");
 
-        fclose(ptr);
+        for (int i = 0; i < times; i++) {
+            printf("Enter product %d name: ", i + 1);
+            scanf("%s", product);
 
-              printf("\nData written successfully.\n");
-        break;
+            printf("Enter product %d price (₹): ", i + 1);
+            scanf("%d", &price);
 
-       case 2:
-        ptr = fopen("customer_database.txt", "r");
-           if (!ptr) {
-            printf("File not found!\n");
-            return 1;
+            total += price;
+
+           
+            fprintf(ptr, "- %s : ₹%d\n", product, price);
         }
 
-            fscanf(ptr, "%s", name);
-        fscanf(ptr, "%d", &date);
-            fscanf(ptr, "%s", num);
-        fscanf(ptr, "%d", &am);
-            fscanf(ptr, "%d", &pm);
+        fprintf(ptr, "Total Amount: ₹%d\n", total);
+
+        printf("Enter the paid amount (₹):\n");
+        scanf("%d", &am);
+
+        printf("Enter the unpaid amount (₹):\n");
+        scanf("%d", &pm);
+
+        fprintf(ptr, "Paid Amount: ₹%d\n", am);
+        fprintf(ptr, "Unpaid Amount: ₹%d\n", pm);
 
         fclose(ptr);
-
-             printf("\n--- Customer Data Read ---\n");
-        printf("Name          : %s\n", name);
-             printf("Date          : %d\n", date);
-                  printf("Product list  : %s\n", num);
-        printf("Paid amount   : %d\n", am);
-           printf("Unpaid amount : %d\n", pm);
-
+        printf("\nData written successfully.\n");
         break;
 
-    default:
-        printf("Invalid choice!\n");
+    case 2:
+    ptr = fopen("customer_database.txt", "r");
+    if (!ptr) {
+        printf("File not found!\n");
+        return 1;
     }
 
+    char pname[50];
+    int pprice;
+
+    printf("\n--- Customer Data ---\n");
+
+    fscanf(ptr, "Name: %s\n", name);
+
+    fscanf(ptr, "Date: %d\n", &date);
+
+    printf("Name  : %s\n", name);
+    printf("Date  : %d\n", date);
+
+    printf("Products:\n");
+
+    fscanf(ptr, "Products:\n");
+
+   
+    while (fscanf(ptr, " %s : ₹%d\n", pname, &pprice) == 2) {
+        printf("- %s : ₹%d\n", pname, pprice);
+    }
+
+    fscanf(ptr, "Total Amount: ₹%d\n", &total);
+    fscanf(ptr, "Paid Amount: ₹%d\n", &am);
+    fscanf(ptr, "Unpaid Amount: ₹%d\n", &pm);
+
+    printf("Total Amount : ₹%d\n", total);
+    printf("Paid Amount  : ₹%d\n", am);
+    printf("Unpaid Amount: ₹%d\n", pm);
+
+    fclose(ptr);
+    break;
+    }
     return 0;
 }
