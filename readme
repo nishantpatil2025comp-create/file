@@ -1,3 +1,5 @@
+ACTIVITY 8
+
 Research:
 File handling is an essential aspect of programming, allowing us to interact with files stored on a computer’s storage system. In the C programming language, file handling is achieved through a set of functions provided by the standard library. This blog post will guide you through the process of reading and writing files in C, covering the necessary steps and functions involved.
 
@@ -12,47 +14,34 @@ It is safe to say that file handling is a critical aspect of any programming lan
 https://unstop.com/blog/file-handling-in-c  
 
 
-IDEATE :  The file handling is for storing various types of information 
-Of a user like photos ,information of work,text .we are using this file to store 
-Some information about students in school like their name  ,roll number
-Marks etc .
+IDEATE :  This program is a basic billing system created using C, where the user can either write new customer details to a file or read the stored information. In the write mode, the program collects the customer’s name, date of purchase, and the list of products along with their prices. It then calculates the total amount of all the products and also records the paid and unpaid amounts. All this information is saved neatly in a text file, just like a bill. In the read mode, the program opens the same file and retrieves the stored data using file-handling functions, allowing the user to view the complete bill whenever needed. Overall, this program demonstrates simple file operations, loops, and input handling to create and manage a small customer billing record.
 
 Build in 
 #include <stdio.h>
 
-
-
 int main() {
-    
- 
     int choice;
-    int date, am, pm;
-    char name[50], num[100];
+    int date, am, pm, times;
+    char name[50];
+    char product[50];
+    int price;
+    int total = 0;
     FILE *ptr;
 
-    printf("Enter the operation:\n");
-    printf("1. Write\n2. Read\n3. Display\n");
+    printf("Enter the operation:\n1. Write\n2. Read\n");
     scanf("%d", &choice);
 
     switch (choice) {
 
     case 1:
-            printf("Enter the name of customer:\n");
-          scanf("%s", name);
+        printf("Enter customer name:\n");
+        scanf("%s", name);
 
-        printf("Enter the date (as number, e.g., 20241124):\n");
-           scanf("%d", &date);
-         for (int i=0;i<4;i++){
-          printf("Enter the product list:\n");
-           scanf("%s", &num);
-         }
-    
-         printf("Enter the paid amount:\n");
-              scanf("%d", &am);
-     
- 
-         printf("Enter the unpaid amount:\n");
-             scanf("%d", &pm);
+        printf("Enter date (e.g., 15012007):\n");
+        scanf("%d", &date);
+
+        printf("How many products purchased?\n");
+        scanf("%d", &times);
 
         ptr = fopen("customer_database.txt", "w");
         if (!ptr) {
@@ -60,45 +49,77 @@ int main() {
             return 1;
         }
 
-            fprintf(ptr, "%s\n", name);
-            fprintf(ptr, "%d\n", date);
-            fprintf(ptr, "%s\n", num);
-            fprintf(ptr, "%d\n", am);
-            fprintf(ptr, "%d\n", pm);
+        fprintf(ptr, "Name: %s\n", name);
+        fprintf(ptr, "Date: %d\n", date);
+        fprintf(ptr, "Products:\n");
 
-        fclose(ptr);
+        for (int i = 0; i < times; i++) {
+            printf("Enter product %d name: ", i + 1);
+            scanf("%s", product);
 
-              printf("\nData written successfully.\n");
-        break;
+            printf("Enter product %d price (₹): ", i + 1);
+            scanf("%d", &price);
 
-       case 2:
-        ptr = fopen("customer_database.txt", "r");
-           if (!ptr) {
-            printf("File not found!\n");
-            return 1;
+            total += price;
+
+           
+            fprintf(ptr, "- %s : ₹%d\n", product, price);
         }
 
-            fscanf(ptr, "%s", name);
-        fscanf(ptr, "%d", &date);
-            fscanf(ptr, "%s", num);
-        fscanf(ptr, "%d", &am);
-            fscanf(ptr, "%d", &pm);
+        fprintf(ptr, "Total Amount: ₹%d\n", total);
+
+        printf("Enter the paid amount (₹):\n");
+        scanf("%d", &am);
+
+        printf("Enter the unpaid amount (₹):\n");
+        scanf("%d", &pm);
+
+        fprintf(ptr, "Paid Amount: ₹%d\n", am);
+        fprintf(ptr, "Unpaid Amount: ₹%d\n", pm);
 
         fclose(ptr);
-
-             printf("\n--- Customer Data Read ---\n");
-        printf("Name          : %s\n", name);
-             printf("Date          : %d\n", date);
-                  printf("Product list  : %s\n", num);
-        printf("Paid amount   : %d\n", am);
-           printf("Unpaid amount : %d\n", pm);
-
+        printf("\nData written successfully.\n");
         break;
 
-    default:
-        printf("Invalid choice!\n");
+    case 2:
+    ptr = fopen("customer_database.txt", "r");
+    if (!ptr) {
+        printf("File not found!\n");
+        return 1;
     }
 
+    char pname[50];
+    int pprice;
+
+    printf("\n--- Customer Data ---\n");
+
+    fscanf(ptr, "Name: %s\n", name);
+
+    fscanf(ptr, "Date: %d\n", &date);
+
+    printf("Name  : %s\n", name);
+    printf("Date  : %d\n", date);
+
+    printf("Products:\n");
+
+    fscanf(ptr, "Products:\n");
+
+   
+    while (fscanf(ptr, " %s : ₹%d\n", pname, &pprice) == 2) {
+        printf("- %s : ₹%d\n", pname, pprice);
+    }
+
+    fscanf(ptr, "Total Amount: ₹%d\n", &total);
+    fscanf(ptr, "Paid Amount: ₹%d\n", &am);
+    fscanf(ptr, "Unpaid Amount: ₹%d\n", &pm);
+
+    printf("Total Amount : ₹%d\n", total);
+    printf("Paid Amount  : ₹%d\n", am);
+    printf("Unpaid Amount: ₹%d\n", pm);
+
+    fclose(ptr);
+    break;
+    }
     return 0;
 }
 
@@ -111,20 +132,29 @@ Case 1;
 
 
 Case 2
---- Customer Data Read ---
-Name          : NISHANT
-Date          : 15012007
-Product list  : milk
-Paid amount   : 120
-Unpaid amount : 0
+Enter the operation:
+1. Write
+2. Read
+2
+
+--- Customer Data ---
+Name  : fvigb
+Date  : 142514
+Products:
+- jenfn : ₹233
+- gdggv : ₹355
+- gvdtvtv : ₹344
+- vvvtd : ₹77
+- yye : ₹99
+Total Amount : ₹1108
+Paid Amount  : ₹779
+Unpaid Amount: ₹887
 
 
 
 
 
-
-
-
+IMPLEMENTATION :
 
 
 
